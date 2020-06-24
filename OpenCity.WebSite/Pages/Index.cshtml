@@ -1,10 +1,33 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Open City";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="text-center">
+        <h1 class="display-4">Bem-vindo</h1>
+        <p>Aqui é o menu inicial que podemos mostrar as notícias dos dois sites.</p>
+
+        @foreach (var item in Model.Feeds)
+        {
+            <h2>@item.Title</h2>
+
+            @foreach (var itemFeed in item.Items)
+            {
+                <hr />
+                <h5><a href="@itemFeed.Link" target="_blank">@itemFeed.Title</a></h5>
+                <h5 class="text-muted">@itemFeed.Description</h5>
+                <hr />
+            }
+        }
+        <h2>Prefeitura de Sant'Ana do Livramento</h2>
+        @await foreach (var item in Model.CityHallPosts)
+        {
+
+            <hr />
+            <h5><a href="@item.Link" target="_blank">@item.Title</a></h5>
+            <h5 class="text-muted">@item.FonteDataPublicacao</h5>
+            <hr />
+            
+        }
+    </div>

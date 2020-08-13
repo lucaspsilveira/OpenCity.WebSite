@@ -1,33 +1,117 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Open City";
+    ViewData["Title"] = "Livra City";
 }
 
-    <div class="text-center">
-        <h1 class="display-4">Bem-vindo</h1>
-        <p>Aqui é o menu inicial que podemos mostrar as notícias dos dois sites.</p>
+<div class="text-center">
+    <h1 class="display-4">últimas notícias</h1>
+    <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="pills-sentinela-tab" data-toggle="pill" href="#pills-sentinela" role="tab" aria-controls="pills-sentinela" aria-selected="true">Sentinela24h</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pills-aplateia-tab" data-toggle="pill" href="#pills-aplateia" role="tab" aria-controls="pills-aplateia" aria-selected="false">A plateia</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pills-prefeitura-tab" data-toggle="pill" href="#pills-prefeitura" role="tab" aria-controls="pills-prefeitura" aria-selected="false">Prefeitura de Sant'Ana do Livramento</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-sentinela" role="tabpanel" aria-labelledby="pills-sentinela-tab">
+            <div class="row">
+                @foreach (var itemFeed in Model.Feeds.Where(x => x.Link.Contains("sentinela")).First().Items)
+                {
+                    <div class="col-sm-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="@itemFeed.Link" target="_blank">@itemFeed.Title</a></h5>
+                                <p class="card-text">@(itemFeed.Description.Length > 150 ? itemFeed.Description.Substring(0,150) + "..." : itemFeed.Description)</p>
+                                <div id="@itemFeed.Link" style="display:none">
+                                    @Html.Raw(itemFeed.Content)
+                                </div>
+                                <button type="button" onclick="mostraConteudo('@itemFeed.Link', '@itemFeed.Title')" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+                                    Ver mais
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-aplateia" role="tabpanel" aria-labelledby="pills-aplateia-tab">
+            <div class="row">
+                @foreach (var itemFeed in Model.Feeds.Where(x => x.Link.Contains("aplateia")).First().Items)
+                {
+                    <div class="col-sm-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="@itemFeed.Link" target="_blank">@itemFeed.Title</a></h5>
+                                <p class="card-text">@(itemFeed.Description.Length > 150 ? itemFeed.Description.Substring(0,150) + "..." : itemFeed.Description)</p>
+                                <div id="@itemFeed.Link" style="display:none" hidden>
+                                    @Html.Raw(itemFeed.Content)
+                                </div>
+                                <button type="button" onclick="mostraConteudo('@itemFeed.Link', '@itemFeed.Title')" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+                                    Ver mais
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-prefeitura" role="tabpanel" aria-labelledby="pills-prefeitura-tab">
+            <div class="row">
+                @await foreach (var item in Model.CityHallPosts)
+                {
+                    <div class="col-sm-6">
+                        <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src=@item.LinkImg class="card-img" alt="...">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="@item.Link" target="_blank">@item.Title</a></h5>
 
-        @foreach (var item in Model.Feeds)
-        {
-            <h2>@item.Title</h2>
+                                        <p class="card-text"><small class="text-muted">@item.FonteDataPublicacao</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            @foreach (var itemFeed in item.Items)
-            {
-                <hr />
-                <h5><a href="@itemFeed.Link" target="_blank">@itemFeed.Title</a></h5>
-                <h5 class="text-muted">@itemFeed.Description</h5>
-                <hr />
-            }
-        }
-        <h2>Prefeitura de Sant'Ana do Livramento</h2>
-        @await foreach (var item in Model.CityHallPosts)
-        {
+                }
+            </div>
 
-            <hr />
-            <h5><a href="@item.Link" target="_blank">@item.Title</a></h5>
-            <h5 class="text-muted">@item.FonteDataPublicacao</h5>
-            <hr />
-            
-        }
+        </div>
     </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="staticBackdropBody"class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mostraConteudo(link, titulo) {
+        var conteudo = document.getElementById(link).innerHTML.trim();
+        document.getElementById("staticBackdropLabel").innerHTML = titulo;
+        document.getElementById("staticBackdropBody").innerHTML = conteudo;
+        console.log(conteudo);
+    }
+</script>

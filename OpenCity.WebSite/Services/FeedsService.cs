@@ -1,8 +1,5 @@
 ﻿using CodeHollow.FeedReader;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OpenCity.WebSite.Services
 {
@@ -17,12 +14,12 @@ namespace OpenCity.WebSite.Services
 
         public IEnumerable<Feed> GetFeeds()
         {
-            var feed = FeedReader.ReadAsync("http://www.aplateia.com.br/feed/atom/");
-            var feed2 = FeedReader.ReadAsync("https://www.sentinela24h.com/blog-feed.xml");
+            var feedAplateia = FeedReader.ReadAsync("http://www.aplateia.com.br/feed/atom/");
+            var feedSentinela = FeedReader.ReadAsync("https://www.sentinela24h.com/blog-feed.xml");
             List<Feed> feeds = new List<Feed>
             {
-                feed.Result,
-                feed2.Result
+                feedAplateia.Result,
+                feedSentinela.Result
             };
             return feeds;
         }

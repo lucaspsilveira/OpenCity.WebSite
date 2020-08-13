@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenCity.WebSite.Services;
+using WebEssentials.AspNetCore.Pwa;
 
 namespace OpenCity.WebSite
 {
@@ -27,6 +28,13 @@ namespace OpenCity.WebSite
             services.AddRazorPages();
             services.AddTransient<FeedsService>();
             services.AddTransient<CityHallDataService>();
+            services.AddProgressiveWebApp(new PwaOptions
+            {
+                CacheId = "Worker " + 1,
+                Strategy = ServiceWorkerStrategy.CacheFirst,
+                RoutesToPreCache = "/Home/Contact, /Home/About",
+                OfflineRoute = "fallBack.html",
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

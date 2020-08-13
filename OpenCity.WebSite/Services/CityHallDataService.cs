@@ -33,12 +33,6 @@ namespace OpenCity.WebSite.Services
                 var fonteDataPublicacao = item.QuerySelector("div.col-lg-10 p i").Text();
                 
                 var dadosPost = item.QuerySelectorAll("div.col-lg-2 a");
-                
-                // DEBUG
-                //_logger.LogInformation("Título: " + dadosPost.ElementAt(1).QuerySelector("img").GetAttribute("title"));
-                //_logger.LogInformation("Imagem: " + dadosPost.ElementAt(1).QuerySelector("img").GetAttribute("src"));
-                //_logger.LogInformation("Link: " + "http://www.sdolivramento.com.br/prefeitura/" + dadosPost.ElementAt(0).GetAttribute("href"));
-                //_logger.LogInformation("Fonte e Data de Publicação: " + fonteDataPublicacao);
 
                 CityHallPublication publication = new CityHallPublication();
                 publication.Title = dadosPost.ElementAt(1).QuerySelector("img").GetAttribute("title");
